@@ -1,0 +1,15 @@
+#!/bin/bash
+set -x
+HOST=`hostname -f`
+DATE=`date +%d-%m-%y`
+OLD=`date --date="6 day ago" +%d-%m-%y`
+if [ -s /var/log/mysql/sql_killed_slow.log ]
+then
+	mv  /var/log/mysql/sql_killed_slow.log /var/log/mysql/sql_killed_slow-$DATE-$HOST.log
+	echo "Killed slow queries-$DATE-PFA"| /usr/bin/mutt -s"Killed slow queries-$DATE" sub-devops-alerts@domain.com -c mh-org@domain.com -c scm-last-mile@domain.com -a /var/log/mysql/sql_killed_slow-$DATE-$HOST.log
+fi
+
+if [ -f /var/log/mysql/sql_killed_slow-$OLD-$HOST.log ]
+then
+	rm -f /var/log/mysql/sql_killed_slow-$OLD-$HOST.log
+fi

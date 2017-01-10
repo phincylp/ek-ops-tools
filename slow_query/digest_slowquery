@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+/usr/bin/pt-query-digest  --user=anemometer --password=superSecurePass  --review h=sub-ops-tools.nm.domain.com,D=slow_query_log,t=erp_logis_db3_review  --history h=sub-ops-tools.nm.domain.com,D=slow_query_log,t=erp_logis_db3_review_history  --no-report  --limit=0%  --filter=" \$event->{Bytes} = length(\$event->{arg}) and \$event->{hostname}=\"$HOSTNAME\""  /var/log/mysql/mysql-slow.log
+

@@ -1,0 +1,8 @@
+
+
+Following modules are needed in server. Available via pip
+  - multiprocessing
+  - sys
+  - requests
+  - re
+  - logging

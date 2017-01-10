@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -x
+HOST=`hostname -f`
+USER="ekl_admin"
+PASS="kjhx1sd"
+SECONDS_TOO_LONG=300
+
+QUERIES_RUNNING_TOO_LONG=`mysql -h$HOST -u$USER -p$PASS  -ANe"SELECT COUNT(1) FROM information_schema.processlist WHERE COMMAND='Query'  AND time >= ${SECONDS_TOO_LONG}"`
+
+if [ ${QUERIES_RUNNING_TOO_LONG} -gt 0 ]
+then
+    date >> /var/log/mysql/sql_killed_slow.log
+    mysql -h$HOST -u$USER -p$PASS -e "select * FROM information_schema.processlist WHERE  COMMAND='Query'  AND time >= ${SECONDS_TOO_LONG}" >> /var/log/mysql/sql_killed_slow.log
+    KILLPROC_SQLSTMT="SELECT CONCAT('KILL QUERY ',id,';') KillQuery FROM information_schema.processlist WHERE  COMMAND='Query'  AND time >= ${SECONDS_TOO_LONG}"
+
+    mysql -h$HOST -u$USER -p$PASS  -ANe"${KILLPROC_SQLSTMT}" > /tmp/kill_log_queries.sql
+    mysql -h$HOST -u$USER -p$PASS < /tmp/kill_log_queries.sql
+fi
