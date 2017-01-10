@@ -4,7 +4,7 @@ import MySQLdb
 
 def mysql_conn(dbhost):
 	user='root'
-	passwd='KayajC9s'
+	passwd='MyPass'
 	dbconn = MySQLdb.connect(host=dbhost, user=user, passwd=passwd, db='mysql', connect_timeout=5)
 	dbcur = dbconn.cursor(cursorclass = MySQLdb.cursors.DictCursor)
 	return dbconn, dbcur
